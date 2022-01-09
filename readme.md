@@ -26,7 +26,7 @@ Currently supports:
  
  Images:  
  **Cascaded shadow maps**  
- ![Cascaded Shadow Maps](/../images/CascShadowMaps.png?raw=true)
+ ![Cascaded Shadow Maps](/../images/CascShadowMaps.png?raw=true)  
  **Cascaded shadow maps culling spheres visualisation**  
- **Effect of varying shadow map sizes on shadow details**
- **Hard and soft shadows**
+ **Effect of varying shadow map sizes on shadow details**  
+ **Hard and soft shadows**  
