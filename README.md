@@ -26,8 +26,10 @@ Currently supports:
  - Support for light cookies
  
  Images:  
- **Cascaded shadow maps**  
- ![Cascaded Shadow Maps](/images/CascShadowMaps.png)  
+ **Cascaded shadow maps**   
+ <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/CascShadowMaps.PNG" width="400">  
  **Cascaded shadow maps culling spheres visualisation**  
+ <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/CascCullingSpheres.PNG" width="400">  
  **Effect of varying shadow map sizes on shadow details**  
+ <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/shadowLevels.png" width="400">  
  **Hard and soft shadows**  
