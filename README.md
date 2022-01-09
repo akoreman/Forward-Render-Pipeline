@@ -32,4 +32,4 @@ Currently supports:
  <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/CascCullingSpheres.PNG" width="400">  
  **Effect of varying shadow map sizes on shadow details**  
  <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/shadowLevels.png" width="400">  
- **Hard and soft shadows**  
+  
