@@ -9,7 +9,7 @@ Currently supports:
 - Unlit and Lit shaders
   - opaque and transparant
   - Texture sampling
-- Illumination by directional lights
+- Illumination by multiple colored directional lights
   - BRDF controlled by metallic and smoothness parameters
   - Casted shadows using shadow maps
     - Support for cascaded shadow maps
