@@ -14,6 +14,7 @@ Currently supports:
   - Casted shadows using shadow maps
     - Support for cascaded shadow maps
     - Support for varying shadow maps sizes
+  - Support for soft shadows using percentage closer filtering
  
  To do:
  - Support for spot lights + shadows
