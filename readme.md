@@ -14,5 +14,11 @@ Currently supports:
   - Casted shadows using shadow maps
     - Support for cascaded shadow maps
  
+ To do:
+ - Support for spot lights + shadows
+ - Support for point lights + shadows
+ - Suport for normal maps
+ - Support for baked lights/GI/emmisive surfaces
+ - Support for baked shadows
  
  ![Cascaded Shadow Maps](/../images/CascShadowMaps.png?raw=true)
