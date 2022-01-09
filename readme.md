@@ -1,8 +1,8 @@
 **WORK IN PROGRESS - Currently being expanded -**
 **Shader pipeline using Unity3D and HLSL**
 
-In order to better understand Unity's render pipelines, and render pipelines in general, I implemented a render
-pipeline in Unity3D by using its scriptable render pipeline and HLSL for the shaders themselves.
+In order to gain some more intuition for Unity's render pipelines I implemented a render
+pipeline in Unity3D by using its scriptable render pipeline and HLSL for the shaders.
 
 Currently supports:
 - Unlit shader
