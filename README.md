@@ -25,7 +25,7 @@ Currently supports:
  - Support for reflections
  - Support for light cookies
  
- Images:  
+ ## Images:  
  **Cascaded shadow maps**   
  <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/CascShadowMaps.PNG" width="400">  
  **Cascaded shadow maps culling spheres visualisation**  
