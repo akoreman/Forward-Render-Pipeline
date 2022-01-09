@@ -13,7 +13,7 @@ Currently supports:
   - BRDF controlled by metallic and smoothness parameters
   - Casted shadows using shadow maps
     - Support for cascaded shadow maps
-    - Support for varying shadow maps sizes
+    - Support for varying shadow map resolution
   - Support for soft shadows using percentage closer filtering
  
  To do:
