@@ -12,7 +12,7 @@ Currently supports:
   - opaque and transparant
   - Texture sampling
   - Illumination by directional lights
-   - BRDF controlled by metallic and smoothness parameters
-   - Casted shadows using shadow maps
-    - Support for cascaded shadow maps
+    - BRDF controlled by metallic and smoothness parameters
+    - Casted shadows using shadow maps
+      - Support for cascaded shadow maps
  
