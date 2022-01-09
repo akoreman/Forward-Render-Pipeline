@@ -1,5 +1,5 @@
 **WORK IN PROGRESS/Currently being expanded -**
-**Custom shader pipeline using Unity3D SRP and HLSL**
+# Custom shader pipeline using Unity3D SRP and HLSL
 
 In order to gain more intuition for Unity3D's render pipelines I implemented a custom render
 pipeline in Unity3D by using its scriptable render pipeline and HLSL for the shaders. For some parts following the
