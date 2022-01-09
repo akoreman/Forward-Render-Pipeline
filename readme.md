@@ -1,4 +1,4 @@
-**WORK IN PROGRESS/Currently being expanded -**
+**WORK IN PROGRESS/Currently being expanded**
 # Custom shader pipeline using Unity3D SRP and HLSL
 
 In order to gain more intuition for Unity3D's render pipelines I implemented a custom render
