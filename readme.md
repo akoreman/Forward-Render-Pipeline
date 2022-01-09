@@ -21,6 +21,7 @@ Currently supports:
  - Suport for normal maps
  - Support for baked lights/GI/emmisive surfaces
  - Support for baked shadows
+ - Support for reflections
  
  Images:  
  **Cascaded shadow maps**  
