@@ -40,9 +40,6 @@ Light GetDirectionalLight(int index, Surface surfaceWorldSpace, ShadowData shado
 
 	DirectionalShadowData dirShadowData = GetDirectionalShadowData(index, shadowData);
 	light.attenuation = GetDirectionalShadowAttenuation(dirShadowData, shadowData, surfaceWorldSpace);
-	
-	//light.attenuation = shadowData.cascadeIndex * 0.25;
-	//light.attenuation = 1;
 
 	return light;
 }

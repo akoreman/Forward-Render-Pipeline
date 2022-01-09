@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.Rendering;
 using Unity.Collections;
@@ -31,8 +30,10 @@ public class CamRenderer
     CullingResults cullingResults;
     Lighting lighting = new Lighting();
 
-    static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
-    static ShaderTagId litShaderTagId = new ShaderTagId("CustomLit");
+    //static ShaderTagId unlitShaderTagId = new ShaderTagId("SRPDefaultUnlit");
+    static ShaderTagId unlitShaderTagId = new ShaderTagId("Unlit");
+    //static ShaderTagId litShaderTagId = new ShaderTagId("CustomLit");
+    static ShaderTagId litShaderTagId = new ShaderTagId("Lit");
 
     const string bufferName = "Render Camera";
     CommandBuffer buffer = new CommandBuffer {name = bufferName};
@@ -114,6 +115,9 @@ public class Lighting
     const string bufferName = "Lighting";
     const int maxDirLightCount = 4;
 
+    CullingResults cullingResults;
+    Shadows shadows = new Shadows();
+
     CommandBuffer buffer = new CommandBuffer {name = bufferName};
 
     static int dirLightCountId = Shader.PropertyToID("_DirectionalLightCount");
@@ -124,9 +128,6 @@ public class Lighting
     static Vector4[] dirLightColours = new Vector4[maxDirLightCount];
     static Vector4[] dirLightDirections = new Vector4[maxDirLightCount];
     static Vector4[] dirLightShadowData = new Vector4[maxDirLightCount];
-
-    CullingResults cullingResults;
-    Shadows shadows = new Shadows();
 
     public void Setup(ScriptableRenderContext context, CullingResults cullingResults, ShadowSettings shadowSettings)
     {
@@ -145,14 +146,12 @@ public class Lighting
     {
         dirLightColours[index] = visibleLight.finalColor;
         dirLightDirections[index] = -visibleLight.localToWorldMatrix.GetColumn(2);
-        //shadows.ReserveDirectionalShadows(visibleLight.light, index);
         dirLightShadowData[index] = shadows.ReserveDirectionalShadows(visibleLight.light, index);
     }
 
     void SetupLights() 
     {
         NativeArray<VisibleLight> visibleLights = cullingResults.visibleLights;
-        //visibleLights = cullingResults.visibleLights;
 
         int dirLightCount = 0;
 
@@ -469,10 +468,12 @@ public class Shadows
     {
 
         float texelSize = 2f * cullingSphere.w / tileSize;
+        float filterSize = texelSize * ((float)settings.directional.filter + 1f);
         //cascadeData[index].x = 1f / cullingSphere.w;
+        cullingSphere.w -= filterSize;
         cullingSphere.w *= cullingSphere.w;
         cascadeCullingSpheres[index] = cullingSphere;
-        cascadeData[index] = new Vector4(1f / cullingSphere.w, texelSize * 1.4142136f);
+        cascadeData[index] = new Vector4(1f / cullingSphere.w, filterSize * 1.4142136f);
     }
 
 }

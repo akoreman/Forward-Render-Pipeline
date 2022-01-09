@@ -16,6 +16,10 @@ Shader "Custom RP/Unlit"
 		ZWrite [_ZWrite]
 
 		Pass { 
+			Tags {
+				"LightMode" = "Unlit"
+			}
+
 			HLSLPROGRAM
 			#pragma multi_compile_instancing
 			#pragma target 3.5

@@ -31,17 +31,20 @@ CBUFFER_START(_CustomShadows)
 	float4 _CascadeData[MAX_CASCADE_COUNT];
 CBUFFER_END
 
-struct DirectionalShadowData {
+struct DirectionalShadowData
+{
 	float strength;
 	int tileIndex;
 };
 
-struct ShadowData {
+struct ShadowData
+{
 	int cascadeIndex;
 	float strength;
 };
 
-float FadedShadowStrength(float distance, float scale, float fade) {
+float FadedShadowStrength(float distance, float scale, float fade)
+{
 	return saturate((1.0 - distance * scale) * fade);
 }
 
@@ -78,11 +81,13 @@ ShadowData GetShadowData(Surface surfaceWorldSpace)
 	return data;
 }
 
-float SampleDirectionalShadowAtlas(float3 positionSTS) {
+float SampleDirectionalShadowAtlas(float3 positionSTS)
+{
 	return SAMPLE_TEXTURE2D_SHADOW(_DirectionalShadowAtlas, SHADOW_SAMPLER, positionSTS);
 }
 
-float FilterDirectionalShadow(float3 positionSTS) {
+float FilterDirectionalShadow(float3 positionSTS)
+{
 #if defined(DIRECTIONAL_FILTER_SETUP)
 	float weights[DIRECTIONAL_FILTER_SAMPLES];
 	float2 positions[DIRECTIONAL_FILTER_SAMPLES];

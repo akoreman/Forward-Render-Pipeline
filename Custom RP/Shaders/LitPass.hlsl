@@ -19,14 +19,16 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 
-struct Attributes {
+struct Attributes
+{
 	float3 positionObjectSpace : POSITION;
 	float2 coordsUV : TEXCOORD0;
 	float3 normalObjectSpace : NORMAL;
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-struct Varyings {
+struct Varyings 
+{
 	float4 positionClipSpace : SV_POSITION;
 	float3 positionWorldSpace : VAR_POSITION;
 	float2 coordsUV : VAR_BASE_UV;
@@ -34,7 +36,8 @@ struct Varyings {
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-Varyings LitPassVertex (Attributes input)  {
+Varyings LitPassVertex (Attributes input) 
+{
 	//Setup output struct and transfer the instance IDs.
 	Varyings output;
 	UNITY_SETUP_INSTANCE_ID(input);
@@ -49,7 +52,8 @@ Varyings LitPassVertex (Attributes input)  {
 	return output;
 }
 
-float4 LitPassFragment (Varyings input) : SV_TARGET {
+float4 LitPassFragment (Varyings input) : SV_TARGET 
+{
 	UNITY_SETUP_INSTANCE_ID(input);
 
 	float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.coordsUV);

@@ -45,7 +45,8 @@ vertexOutput UnlitPassVertex (vertexInput input)
 	return output;
 }
 
-float4 UnlitPassFragment (vertexOutput input) : SV_TARGET {
+float4 UnlitPassFragment (vertexOutput input) : SV_TARGET
+{
 	UNITY_SETUP_INSTANCE_ID(input);
 
 	// Sample the texture and multiply it with the basecolour of the material to get the final colour.
@@ -57,10 +58,6 @@ float4 UnlitPassFragment (vertexOutput input) : SV_TARGET {
 	#if defined(_CLIPPING)
 		clip(outputColor.a - UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _alphaCutoff));
 	#endif
-
-	//outputColor.r = outputColor.a;
-	//outputColor.g = 0;
-	//outputColor.b = 0;
 
 	return outputColor;
 }

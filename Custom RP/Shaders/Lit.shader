@@ -10,8 +10,6 @@ Shader "Custom RP/Lit"
 
 		[Toggle(_PREMULTIPLY_ALPHA)] _PremulAlpha("Premultiply Alpha", Float) = 0
 
-		//[Toggle(_CAST_SHADOWS)] _castShadows("Cast Shadows", Float) = 1
-
 		[Toggle(_CLIPPING)] _Clipping("Alpha Clipping", Float) = 0
 		[Toggle(_SHADOW_CLIPPING)] _SHADOW_CLIPPING("Shadow Clipping", Float) = 0
 
@@ -29,7 +27,7 @@ Shader "Custom RP/Lit"
 
 		Pass { 
 			Tags {
-				"LightMode" = "CustomLit"
+				"LightMode" = "Lit"
 			}
 
 			HLSLPROGRAM
@@ -54,9 +52,7 @@ Shader "Custom RP/Lit"
 
 			HLSLPROGRAM
 			#pragma target 3.5
-			//#pragma shader_feature _CLIPPING
 			#pragma shader_feature _SHADOW_CLIPPING
-			//#pragma shader_feature _SHADOWS_CLIP
 			#pragma multi_compile_instancing
 			#pragma vertex ShadowCasterPassVertex
 			#pragma fragment ShadowCasterPassFragment

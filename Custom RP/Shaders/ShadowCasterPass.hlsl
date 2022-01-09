@@ -11,19 +11,22 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 	UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
-struct Attributes {
+struct Attributes 
+{
 	float3 positionObjectSpace : POSITION;
 	float2 coordsUV : TEXCOORD0;
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-struct Varyings {
+struct Varyings
+{
 	float4 positionClipSpace : SV_POSITION;
 	float2 coordsUV : VAR_BASE_UV;
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-Varyings ShadowCasterPassVertex(Attributes input) {
+Varyings ShadowCasterPassVertex(Attributes input) 
+{
 	Varyings output;
 	UNITY_SETUP_INSTANCE_ID(input);
 	UNITY_TRANSFER_INSTANCE_ID(input, output);
@@ -35,7 +38,8 @@ Varyings ShadowCasterPassVertex(Attributes input) {
 	return output;
 }
 
-void ShadowCasterPassFragment(Varyings input) {
+void ShadowCasterPassFragment(Varyings input)
+{
 	UNITY_SETUP_INSTANCE_ID(input);
 	float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.coordsUV);
 	float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
