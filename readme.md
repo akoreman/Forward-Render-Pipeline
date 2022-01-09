@@ -13,6 +13,7 @@ Currently supports:
   - BRDF controlled by metallic and smoothness parameters
   - Casted shadows using shadow maps
     - Support for cascaded shadow maps
+    - Support for varying shadow maps sizes
  
  To do:
  - Support for spot lights + shadows
@@ -21,4 +22,6 @@ Currently supports:
  - Support for baked lights/GI/emmisive surfaces
  - Support for baked shadows
  
+ Images:  
+ **Cascaded shadow maps**  
  ![Cascaded Shadow Maps](/../images/CascShadowMaps.png?raw=true)
