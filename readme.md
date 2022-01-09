@@ -2,7 +2,7 @@
 **Shader pipeline using Unity3D and HLSL**
 
 In order to gain some more intuition for Unity's render pipelines I implemented a custom render
-pipeline in Unity3D by using its scriptable render pipeline and HLSL for the shaders. For some parts following
+pipeline in Unity3D by using its scriptable render pipeline and HLSL for the shaders. For some parts following the
 tutorial by CatLikeCoding.
 
 Currently supports:
