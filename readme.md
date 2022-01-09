@@ -23,6 +23,7 @@ Currently supports:
  - Support for baked lights/GI/emmisive surfaces
  - Support for baked shadows
  - Support for reflections
+ - Support for light cookies
  
  Images:  
  **Cascaded shadow maps**  
