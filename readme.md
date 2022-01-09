@@ -15,4 +15,4 @@ Currently supports:
     - Support for cascaded shadow maps
  
  
- ![Cascaded Shadow Maps](/assets/images/cascshadowmaps.jpg)
+ ![Cascaded Shadow Maps](cascshadowmaps.jpg)
