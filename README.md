@@ -22,7 +22,7 @@ Currently supports:
  - Support for spot lights + shadows
  - Support for point lights + shadows
  - Suport for normal maps
- - Support for baked lights/GI/emmisive surfaces
+ - Support for emmisive surfaces
  - Support for baked shadows
  - Support for reflections
  - Support for light cookies
