@@ -11,6 +11,7 @@ struct Surface
 	float metallic;
 	float smoothness;  
 	float3 position;
+	float3 interpolatedNormal;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef CUSTOM_UNLIT_PASS_INCLUDED
 #define CUSTOM_UNLIT_PASS_INCLUDED
 
-#include "../ShaderLibrary/Common.hlsl"
+#include "../Auxiliary/Common.hlsl"
 
 TEXTURE2D(_Texture);
 SAMPLER(sampler_Texture);

@@ -15,6 +15,8 @@ Shader "Custom RP/Lit"
 
 		[Toggle(_RECEIVE_SHADOWS)] _ReceiveShadows("Receive Shadows", Float) = 1
 
+		[NoScaleOffset] _NormalMap("Normals", 2D) = "bump" {}
+		_NormalScale("Normal Scale", Range(0, 1)) = 1
 
 		[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
 		[Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 0
@@ -30,6 +32,7 @@ Shader "Custom RP/Lit"
 				"LightMode" = "Lit"
 			}
 
+
 			HLSLPROGRAM
 			#pragma target 3.5
 			#pragma multi_compile_instancing
@@ -38,6 +41,7 @@ Shader "Custom RP/Lit"
 			#pragma shader_feature _CLIPPING
 			#pragma shader_feature _PREMULTIPLY_ALPHA
 			#pragma multi_compile _ _DIRECTIONAL_PCF3 _DIRECTIONAL_PCF5 _DIRECTIONAL_PCF7
+			#pragma multi_compile _ LIGHTMAP_ON
 			#include "LitPass.hlsl"
 			#pragma shader_feature _RECEIVE_SHADOWS
 			ENDHLSL
@@ -59,6 +63,21 @@ Shader "Custom RP/Lit"
 			#include "ShadowCasterPass.hlsl"
 			ENDHLSL
 
+		}
+
+		Pass {
+			Tags {
+				"LightMode" = "Meta"
+			}
+
+			Cull Off
+
+			HLSLPROGRAM
+			#pragma target 3.5
+			#pragma vertex MetaPassVertex
+			#pragma fragment MetaPassFragment
+			#include "MetaPass.hlsl"
+			ENDHLSL
 		}
 	}
 }
