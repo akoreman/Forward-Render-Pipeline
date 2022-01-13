@@ -46,7 +46,5 @@ Currently supports:
 
 <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/shadowLevels.png" width="400">  
 
-**Global illumination**
-
-**colored global illumination**
+**Colored global illumination**
   
