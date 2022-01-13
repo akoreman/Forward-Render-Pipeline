@@ -30,7 +30,7 @@ Currently supports:
  - Support for reflections
  - Support for light cookies
  
- ## Images:  
+ ## Screenshots:  
  
 <img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/sampleRender.PNG" width="400">  
 
