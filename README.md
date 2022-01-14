@@ -48,3 +48,4 @@ Currently supports:
 
 **Colored global illumination**
   
+<img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/ColoredGI.PNG" width="400">  
