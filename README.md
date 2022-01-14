@@ -11,9 +11,9 @@ Currently supports:
   - Texture sampling
 - Illumination by multiple colored directional lights
   - BRDF controlled by metallic and smoothness parameters
-  - Casted shadows using shadow maps
-    - Support for cascaded shadow maps
-    - Support for varying shadow map resolution
+  - Casted shadows using light maps
+    - Support for cascaded light maps
+    - Support for varying light map resolution
     - Clipped shadows for transparent objects
   - Support for soft shadows using percentage closer filtering
   - Support for normal maps
