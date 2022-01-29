@@ -1,11 +1,10 @@
-**WORK IN PROGRESS**
 # Custom shader pipeline using Unity3D SRP and HLSL
 
 In order to gain more intuition for scripting render pipelines I implemented a custom render
 pipeline in Unity3D by using its scriptable render pipeline and HLSL for the shaders. For some parts following the
 tutorial by CatLikeCoding.
 
-Currently supports:
+**Currently supports:**
 - Unlit and Lit shaders
   - Opaque and transparant
   - Texture sampling
@@ -22,7 +21,7 @@ Currently supports:
   - Support for using light probes and LPPVs to approximate GI for dynamic objects
   - Meta pass for colored GI
  
- To do:
+**Possible extensions:**
  - Support for spot lights + shadows
  - Support for point lights + shadows
  - Support for emmisive surfaces
