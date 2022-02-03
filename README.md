@@ -31,20 +31,20 @@ tutorial by CatLikeCoding.
  
  ## Screenshots:  
  
-<img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/sampleRender.PNG" width="400">  
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/sampleRender.PNG" width="400">  
 
 **Cascaded shadow maps**   
 
-<img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/CascShadowMaps.PNG" width="400">  
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/CascShadowMaps.PNG" width="400">  
 
 **Cascaded shadow maps culling spheres visualisation**  
 
-<img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/CascCullingSpheres.PNG" width="400"> 
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/CascCullingSpheres.PNG" width="400"> 
 
 **Effect of varying shadow map sizes on shadow details**  
 
-<img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/shadowLevels.png" width="400">  
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/shadowLevels.png" width="400">  
 
 **Colored global illumination**
   
-<img src="https://raw.github.com/tkoreman/WIP-ShaderDemo/master/images/ColoredGI.PNG" width="400">  
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/ColoredGI.PNG" width="400">  
