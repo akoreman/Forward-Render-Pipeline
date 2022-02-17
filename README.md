@@ -51,3 +51,7 @@ tutorial by CatLikeCoding.
 **Colored global illumination**
   
 <img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/ColoredGI.PNG" width="400">  
+
+**Reflections from skybox and reflection probes**
+
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/Reflections.png" width="400">  
