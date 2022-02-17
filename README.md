@@ -29,8 +29,8 @@ tutorial by CatLikeCoding.
  - Support for spot lights + shadows.
  - Support for point lights + shadows.
  - Support for emmisive surfaces.
- - Support for baked shadows.
- - Support for light cookies.
+ <!-- - Support for baked shadows. -->
+ <!-- - Support for light cookies. -->
  
  ## Screenshots:  
  
