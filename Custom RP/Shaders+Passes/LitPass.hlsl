@@ -22,13 +22,16 @@
 #endif
 
 TEXTURE2D(_BaseMap);
+TEXTURE2D(_EmissionMap);
 SAMPLER(sampler_BaseMap);
+SAMPLER(sampler_EmissionMap);
 
 TEXTURE2D(_NormalMap);
 
 UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 	UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
 	UNITY_DEFINE_INSTANCED_PROP(float, _Cutoff)
+	UNITY_DEFINE_INSTANCED_PROP(float4, _EmissionColor)
 	UNITY_DEFINE_INSTANCED_PROP(float, _Metallic)
 	UNITY_DEFINE_INSTANCED_PROP(float, _Smoothness)
 	UNITY_DEFINE_INSTANCED_PROP(float, _NormalScale)
@@ -113,9 +116,10 @@ float4 LitPassFragment (Varyings input) : SV_TARGET
 		BRDF brdf = GetBRDF(surface);
 	#endif
 
-	GI gi = GetGI(GI_FRAGMENT_DATA(input), surface);
+	GI gi = GetGI(GI_FRAGMENT_DATA(input), surface, brdf);
 	float3 color = GetLighting(surface, brdf, gi);
-
+    color += SAMPLE_TEXTURE2D(_EmissionMap, sampler_EmissionMap, input.coordsUV) * UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _EmissionColor);
+	
 	return float4(color, surface.alpha);
 }
 

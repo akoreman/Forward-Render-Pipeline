@@ -5,6 +5,7 @@ struct BRDF {
 	float3 diffuse;
 	float3 specular;
 	float roughness;
+    float perceptualRoughness;
 };
 
 #define MIN_REFLECTIVITY 0.04
@@ -31,6 +32,14 @@ float3 DirectBRDF(Surface surface, BRDF brdf, Light light)
 	return SpecularStrength(surface, brdf, light) * brdf.specular + brdf.diffuse;
 }
 
+float3 IndirectBRDF(Surface surface, BRDF brdf, float3 diffuse, float3 specular)
+{
+    float3 reflection = specular * brdf.specular;
+    reflection /= brdf.roughness * brdf.roughness + 1;
+	
+    return diffuse * brdf.diffuse + reflection;
+}
+
 BRDF GetBRDF(Surface surface, bool applyAlphaToDiffuse = false)
 {
 	float oneMinusReflectivity = OneMinusReflectivity(surface.metallic);
@@ -38,8 +47,12 @@ BRDF GetBRDF(Surface surface, bool applyAlphaToDiffuse = false)
 
 	BRDF brdf;
 	brdf.specular = lerp(MIN_REFLECTIVITY, surface.color, surface.metallic);
-	brdf.roughness = PerceptualRoughnessToRoughness(perceptualRoughness);
+	
+    brdf.perceptualRoughness = PerceptualSmoothnessToPerceptualRoughness(surface.smoothness);
+	brdf.roughness = PerceptualRoughnessToRoughness(brdf.perceptualRoughness);
 
+    
+	
 	brdf.diffuse = surface.color * oneMinusReflectivity;
 
 	if (applyAlphaToDiffuse) {

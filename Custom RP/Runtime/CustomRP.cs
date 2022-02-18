@@ -73,7 +73,7 @@ public class CamRenderer
         SortingSettings sortingSettings = new SortingSettings(camera);
         DrawingSettings drawingSettings = new DrawingSettings(unlitShaderTagId, sortingSettings)
         {
-            perObjectData = PerObjectData.Lightmaps | PerObjectData.LightProbe | PerObjectData.LightProbeProxyVolume
+            perObjectData = PerObjectData.Lightmaps | PerObjectData.LightProbe | PerObjectData.LightProbeProxyVolume | PerObjectData.ReflectionProbes
         };
 
         FilteringSettings filteringSettings = new FilteringSettings(RenderQueueRange.all);

@@ -68,6 +68,7 @@ float4 MetaPassFragment (Varyings input) : SV_TARGET
 		meta.rgb = min(PositivePow(meta.rgb, unity_OneOverOutputBoost), unity_MaxOutputValue);
 	}
 
+
 	return meta;
 }
 
