@@ -24,11 +24,12 @@ tutorial by CatLikeCoding.
   - Support for reflections from the skybox.
   - Support for reflections from unity reflection probes.
   - Reflection sharpness affected by surface rougness.
+- Support for emmisive surfaces.
+
  
 **Possible extensions:**
  - Support for spot lights + shadows.
  - Support for point lights + shadows.
- - Support for emmisive surfaces.
  <!-- - Support for baked shadows. -->
  <!-- - Support for light cookies. -->
  
