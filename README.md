@@ -1,6 +1,6 @@
 # Custom shader pipeline using Unity3D SRP and HLSL
 
-In order to gain more intuition for scripting render pipelines I implemented a custom render
+In order to gain more intuition for scripting render pipelines this project implements a custom forward render
 pipeline in Unity3D by using its scriptable render pipeline and HLSL for the shaders. For some parts following the
 tutorial by CatLikeCoding.
 
