@@ -25,10 +25,11 @@ tutorial by CatLikeCoding.
   - Support for reflections from unity reflection probes.
   - Reflection sharpness affected by surface rougness.
 - Support for emmisive surfaces.
+- Support for point-lights (without shadows).
 
  
 **Possible extensions:**
- - Support for spot lights + shadows.
+ - Support for spot light shadows.
  - Support for point lights + shadows.
  <!-- - Support for baked shadows. -->
  <!-- - Support for light cookies. -->
@@ -56,3 +57,7 @@ tutorial by CatLikeCoding.
 **Reflections from skybox and reflection probes**
 
 <img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/Reflections.png" width="400">  
+
+**Illumination by point lights**
+
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/pointlights.png" width="400">  
