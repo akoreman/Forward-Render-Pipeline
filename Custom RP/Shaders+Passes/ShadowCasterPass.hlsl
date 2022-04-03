@@ -3,6 +3,8 @@
 
 #include "../Auxiliary/Common.hlsl"
 
+// Pass to render to the shadowmaps.
+
 TEXTURE2D(_BaseMap);
 SAMPLER(sampler_BaseMap);
 

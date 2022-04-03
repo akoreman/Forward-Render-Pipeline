@@ -1,6 +1,8 @@
 #ifndef CUSTOM_UNITY_INPUT_INCLUDED
 #define CUSTOM_UNITY_INPUT_INCLUDED
 
+// Manage all the matrices and values supplied by Unity3D.
+
 CBUFFER_START(UnityPerDraw)
 	float4x4 unity_ObjectToWorld;
 	float4x4 unity_WorldToObject;

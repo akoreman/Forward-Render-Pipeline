@@ -38,7 +38,7 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 
-struct Attributes
+struct FragmentInput
 {
 	float3 positionObjectSpace : POSITION;
 	float2 coordsUV : TEXCOORD0;
@@ -48,7 +48,7 @@ struct Attributes
 	UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
-struct Varyings 
+struct FragmentOutput 
 {
 	float4 positionClipSpace : SV_POSITION;
 	float3 positionWorldSpace : VAR_POSITION;
@@ -66,10 +66,10 @@ float3 GetNormalTS (float2 coordsUV) {
 	return normal;
 }
 
-Varyings LitPassVertex (Attributes input) 
+FragmentOutput LitPassVertex(FragmentInput input)
 {
 	//Setup output struct and transfer the instance IDs.
-	Varyings output;
+    FragmentOutput output;
 	UNITY_SETUP_INSTANCE_ID(input);
 	UNITY_TRANSFER_INSTANCE_ID(input, output);
 	TRANSFER_GI_DATA(input, output);
@@ -86,7 +86,7 @@ Varyings LitPassVertex (Attributes input)
 	return output;
 }
 
-float4 LitPassFragment (Varyings input) : SV_TARGET 
+float4 LitPassFragment(FragmentOutput input) : SV_TARGET
 {
 	UNITY_SETUP_INSTANCE_ID(input);
 
@@ -100,7 +100,7 @@ float4 LitPassFragment (Varyings input) : SV_TARGET
 
 	Surface surface;
 	surface.position = input.positionWorldSpace;
-	//surface.normal = normalize(input.normalWorldSpace);
+
 	surface.normal = NormalTangentToWorld(GetNormalTS(input.coordsUV), input.normalWorldSpace, input.tangentWS);
 	surface.color = base.rgb;
 	surface.alpha = base.a;

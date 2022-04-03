@@ -51,8 +51,6 @@ BRDF GetBRDF(Surface surface, bool applyAlphaToDiffuse = false)
     brdf.perceptualRoughness = PerceptualSmoothnessToPerceptualRoughness(surface.smoothness);
 	brdf.roughness = PerceptualRoughnessToRoughness(brdf.perceptualRoughness);
 
-    
-	
 	brdf.diffuse = surface.color * oneMinusReflectivity;
 
 	if (applyAlphaToDiffuse) {

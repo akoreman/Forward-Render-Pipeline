@@ -7,6 +7,8 @@
 #include "../Auxiliary/Light.hlsl"
 #include "../Auxiliary/BRDF.hlsl"
 
+// Pass to determine what colour the GI should have at a given clip space position.
+
 TEXTURE2D(_BaseMap);
 SAMPLER(sampler_BaseMap);
 
@@ -22,22 +24,22 @@ UNITY_INSTANCING_BUFFER_START(UnityPerMaterial)
 UNITY_INSTANCING_BUFFER_END(UnityPerMaterial)
 
 
-struct Attributes
+struct FragmentInput
 {
 	float3 positionOS : POSITION;
 	float2 coordsUV : TEXCOORD0;
 	float2 lightMapUV : TEXCOORD1;
 };
 
-struct Varyings 
+struct FragmentOutput 
 {
 	float4 positionCS : SV_POSITION;
 	float2 coordsUV : VAR_BASE_UV;
 };
 
-Varyings MetaPassVertex (Attributes input)
+FragmentOutput MetaPassVertex(FragmentInput input)
 {
-	Varyings output;
+    FragmentOutput output;
 	input.positionOS.xy = input.lightMapUV * unity_LightmapST.xy + unity_LightmapST.zw;
 	input.positionOS.z = input.positionOS.z > 0.0 ? FLT_MIN : 0.0;
 	output.positionCS = TransformWorldToHClip(input.positionOS);
@@ -46,7 +48,7 @@ Varyings MetaPassVertex (Attributes input)
 	return output;
 }
 
-float4 MetaPassFragment (Varyings input) : SV_TARGET
+float4 MetaPassFragment(FragmentOutput input) : SV_TARGET
 {
 	float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.coordsUV);
 	float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(UnityPerMaterial, _BaseColor);
