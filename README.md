@@ -61,3 +61,7 @@ tutorial by CatLikeCoding.
 **Illumination by point lights**
 
 <img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/pointlights.png" width="400">  
+
+**Illumination by spot lights**
+
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/spotlights.png" width="400">  
