@@ -52,12 +52,28 @@ public class ShadowSettings
         cascadeFade = 0.1f,
         filter = FilterMode.PCF2x2,
     };
+
+    [System.Serializable]
+    public struct Other
+    {
+
+        public TextureSize atlasSize;
+
+        public FilterMode filter;
+    }
+
+    public Other other = new Other
+    {
+        atlasSize = TextureSize._1024,
+        filter = FilterMode.PCF2x2
+    };
 }
 
 public class Shadows
 {
     const string bufferName = "Shadows";
     const int maxShadowedDirectionalLightCount = 4;
+    const int maxShadowedOtherLightCount = 16;
     const int maxCascades = 4;
 
     CommandBuffer buffer = new CommandBuffer { name = bufferName };
@@ -65,12 +81,22 @@ public class Shadows
     struct ShadowedDirectionalLight { public int visibleLightIndex; }
     ShadowedDirectionalLight[] ShadowedDirectionalLights = new ShadowedDirectionalLight[maxShadowedDirectionalLightCount];
 
+    struct ShadowedOtherLight
+    {
+        public int visibleLightIndex;
+        public float slopeScaleBias;
+        public float normalBias;
+    }
+
+    ShadowedOtherLight[] shadowedOtherLights = new ShadowedOtherLight[maxShadowedOtherLightCount];
+
     ScriptableRenderContext context;
     CullingResults cullingResults;
 
     ShadowSettings settings;
 
     int ShadowedDirectionalLightCount;
+    int shadowedOtherLightCount;
 
     static int dirShadowAtlasId = Shader.PropertyToID("_DirectionalShadowAtlas");
     static int dirShadowMatricesId = Shader.PropertyToID("_DirectionalShadowMatrices");
@@ -80,6 +106,9 @@ public class Shadows
     static int shadowAtlasSizeId = Shader.PropertyToID("_ShadowAtlasSize");
     //static int shadowDistanceId = Shader.PropertyToID("_ShadowDistance");
     static int shadowDistanceFadeId = Shader.PropertyToID("_ShadowDistanceFade");
+    static int otherShadowAtlasId = Shader.PropertyToID("_OtherShadowAtlas");
+    static int otherShadowMatricesId = Shader.PropertyToID("_OtherShadowMatrices");
+
 
     static string[] directionalFilterKeywords = {
         "_DIRECTIONAL_PCF3",
@@ -87,7 +116,16 @@ public class Shadows
         "_DIRECTIONAL_PCF7",
     };
 
+    static string[] otherFilterKeywords = {
+        "_OTHER_PCF3",
+        "_OTHER_PCF5",
+        "_OTHER_PCF7",
+    };
+
+    Vector4 atlasSizes;
+
     static Matrix4x4[] dirShadowMatrices = new Matrix4x4[maxShadowedDirectionalLightCount * maxCascades];
+    static Matrix4x4[] otherShadowMatrices = new Matrix4x4[maxShadowedOtherLightCount];
     static Vector4[] cascadeCullingSpheres = new Vector4[maxCascades];
     static Vector4[] cascadeData = new Vector4[maxCascades];
 
@@ -98,6 +136,7 @@ public class Shadows
         this.settings = settings;
 
         ShadowedDirectionalLightCount = 0;
+        shadowedOtherLightCount = 0;
     }
 
     void ExecuteBuffer()
@@ -118,8 +157,30 @@ public class Shadows
 
             return new Vector2(light.shadowStrength, settings.directional.cascadeCount * counter);
         }
+
         return Vector2.zero;
     }
+
+    public Vector2 ReserveOtherShadows(Light light, int visibleLightIndex)
+    {
+        if (shadowedOtherLightCount < maxShadowedOtherLightCount && cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
+        {
+            shadowedOtherLights[shadowedOtherLightCount] = new ShadowedOtherLight
+            {
+                visibleLightIndex = visibleLightIndex,
+                slopeScaleBias = light.shadowBias,
+                normalBias = light.shadowNormalBias
+            };
+
+            shadowedOtherLightCount++;
+
+            return new Vector2(-light.shadowStrength, 0f);
+        }
+
+        return Vector2.zero;
+    }
+
+
 
     public void Render()
     {
@@ -131,11 +192,22 @@ public class Shadows
         {
             buffer.GetTemporaryRT(dirShadowAtlasId, 1, 1, 32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
         }
+
+        if (shadowedOtherLightCount > 0)
+        {
+            RenderOtherShadows();
+        }
+        else
+        {
+            buffer.SetGlobalTexture(otherShadowAtlasId, dirShadowAtlasId);
+        }
     }
 
     void RenderDirectionalShadows()
     {
         int atlasSize = (int)settings.directional.atlasSize;
+        atlasSizes.x = atlasSize;
+        atlasSizes.y = 1f / atlasSize;
 
         int split;
 
@@ -147,17 +219,6 @@ public class Shadows
             split = 2;
         else
             split = 4;
-
-        //split = tiles <= 1 ? 1 : tiles <= 4 ? 2 : 4;
-
-        /*
-        if (ShadowedDirectionalLightCount <= 1)
-            split = 1;
-        else
-            split = 2;
-
-        //split = ShadowedDirectionalLightCount <= 1 ? 1 : 2;
-        */
 
         int tileSize = atlasSize / split;
 
@@ -185,7 +246,7 @@ public class Shadows
         buffer.SetGlobalVectorArray(cascadeDataId, cascadeData);
 
         SetKeywords();
-        buffer.SetGlobalVector(shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize));
+        //buffer.SetGlobalVector(shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize));
         buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
@@ -202,6 +263,21 @@ public class Shadows
             else
             {
                 buffer.DisableShaderKeyword(directionalFilterKeywords[i]);
+            }
+        }
+    }
+
+    void SetKeywords(string[] keywords, int enabledIndex)
+    {
+        for (int i = 0; i < keywords.Length; i++)
+        {
+            if (i == enabledIndex)
+            {
+                buffer.EnableShaderKeyword(keywords[i]);
+            }
+            else
+            {
+                buffer.DisableShaderKeyword(keywords[i]);
             }
         }
     }
@@ -243,12 +319,70 @@ public class Shadows
         }
     }
 
-    public void Cleanup()
+    void RenderSpotShadows(int index, int split, int tileSize)
     {
-        buffer.ReleaseTemporaryRT(dirShadowAtlasId);
+        ShadowedOtherLight light = shadowedOtherLights[index];
+        var shadowSettings = new ShadowDrawingSettings(cullingResults, light.visibleLightIndex);
+        cullingResults.ComputeSpotShadowMatricesAndCullingPrimitives( light.visibleLightIndex, out Matrix4x4 viewMatrix,out Matrix4x4 projectionMatrix, out ShadowSplitData splitData);
+
+        shadowSettings.splitData = splitData;
+
+        otherShadowMatrices[index] = ConvertToAtlasMatrix(projectionMatrix * viewMatrix,SetTileViewport(index, split, tileSize), split);
+
+        buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
+        buffer.SetGlobalDepthBias(0f, light.slopeScaleBias);
+
+        ExecuteBuffer();
+
+        context.DrawShadows(ref shadowSettings);
+        buffer.SetGlobalDepthBias(0f, 0f);
+    }
+
+    void RenderOtherShadows()
+    {
+        int atlasSize = (int)settings.other.atlasSize;
+        atlasSizes.z = atlasSize;
+        atlasSizes.w = 1f / atlasSize;
+
+        buffer.GetTemporaryRT( otherShadowAtlasId, atlasSize, atlasSize,32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
+
+        buffer.SetRenderTarget(otherShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
+
+        buffer.ClearRenderTarget(true, false, Color.clear);
+        buffer.BeginSample(bufferName);
+
+        ExecuteBuffer();
+
+        int tiles = shadowedOtherLightCount;
+        int split = tiles <= 1 ? 1 : tiles <= 4 ? 2 : 4;
+        int tileSize = atlasSize / split;
+
+        for (int i = 0; i < shadowedOtherLightCount; i++)
+        {
+            RenderSpotShadows(i, split, tileSize);
+        }
+
+        buffer.SetGlobalMatrixArray(otherShadowMatricesId, otherShadowMatrices);
+        SetKeywords( otherFilterKeywords, (int)settings.other.filter - 1);
+        SetKeywords();
+
+        buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
 
+    public void Cleanup()
+    {
+        buffer.ReleaseTemporaryRT(dirShadowAtlasId);
+
+        if (shadowedOtherLightCount > 0)
+        {
+            buffer.ReleaseTemporaryRT(otherShadowAtlasId);
+        }
+
+        ExecuteBuffer();
+    }
+
+    // Conversion to atlas coordinates taken from CatLikeCoding.
     Matrix4x4 ConvertToAtlasMatrix(Matrix4x4 m, Vector2 offset, int split)
     {
         if (SystemInfo.usesReversedZBuffer)
