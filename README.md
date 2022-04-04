@@ -30,8 +30,7 @@ tutorial by CatLikeCoding.
 
  
 **Possible extensions:**
- - Support for spot light shadows.
- - Support for point lights shadows.
+ - Support for spot and point light shadows.
  <!-- - Support for baked shadows. -->
  <!-- - Support for light cookies. -->
  
