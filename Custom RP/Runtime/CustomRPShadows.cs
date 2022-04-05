@@ -203,53 +203,7 @@ public class Shadows
         }
     }
 
-    void RenderDirectionalShadows()
-    {
-        int atlasSize = (int)settings.directional.atlasSize;
-        atlasSizes.x = atlasSize;
-        atlasSizes.y = 1f / atlasSize;
-
-        int split;
-
-        int tiles = ShadowedDirectionalLightCount * settings.directional.cascadeCount;
-
-        if (tiles <= 1)
-            split = 1;
-        else if (tiles <= 4)
-            split = 2;
-        else
-            split = 4;
-
-        int tileSize = atlasSize / split;
-
-        buffer.GetTemporaryRT(dirShadowAtlasId, atlasSize, atlasSize, 32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
-        buffer.SetRenderTarget(dirShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
-
-        buffer.ClearRenderTarget(true, false, Color.clear);
-        buffer.BeginSample(bufferName);
-        ExecuteBuffer();
-
-        for (int i = 0; i < ShadowedDirectionalLightCount; i++)
-        {
-            RenderDirectionalShadows(i, split, tileSize);
-        }
-
-        buffer.SetGlobalInt(cascadeCountId, settings.directional.cascadeCount);
-        buffer.SetGlobalVectorArray(cascadeCullingSpheresId, cascadeCullingSpheres);
-        //buffer.SetGlobalFloat(shadowDistanceId, settings.maxDistance);
-
-        float f = 1f - settings.directional.cascadeFade;
-
-        buffer.SetGlobalVector(shadowDistanceFadeId, new Vector4(1f / settings.maxDistance, 1f / settings.distanceFade, 1f / (1f - f * f)));
-
-        buffer.SetGlobalMatrixArray(dirShadowMatricesId, dirShadowMatrices);
-        buffer.SetGlobalVectorArray(cascadeDataId, cascadeData);
-
-        SetKeywords();
-        //buffer.SetGlobalVector(shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize));
-        buffer.EndSample(bufferName);
-        ExecuteBuffer();
-    }
+    
 
     void SetKeywords()
     {
@@ -319,6 +273,54 @@ public class Shadows
         }
     }
 
+    void RenderDirectionalShadows()
+    {
+        int atlasSize = (int)settings.directional.atlasSize;
+        atlasSizes.x = atlasSize;
+        atlasSizes.y = 1f / atlasSize;
+
+        int split;
+
+        int tiles = ShadowedDirectionalLightCount * settings.directional.cascadeCount;
+
+        if (tiles <= 1)
+            split = 1;
+        else if (tiles <= 4)
+            split = 2;
+        else
+            split = 4;
+
+        int tileSize = atlasSize / split;
+
+        buffer.GetTemporaryRT(dirShadowAtlasId, atlasSize, atlasSize, 32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
+        buffer.SetRenderTarget(dirShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
+
+        buffer.ClearRenderTarget(true, false, Color.clear);
+        buffer.BeginSample(bufferName);
+        ExecuteBuffer();
+
+        for (int i = 0; i < ShadowedDirectionalLightCount; i++)
+        {
+            RenderDirectionalShadows(i, split, tileSize);
+        }
+
+        buffer.SetGlobalInt(cascadeCountId, settings.directional.cascadeCount);
+        buffer.SetGlobalVectorArray(cascadeCullingSpheresId, cascadeCullingSpheres);
+        //buffer.SetGlobalFloat(shadowDistanceId, settings.maxDistance);
+
+        float f = 1f - settings.directional.cascadeFade;
+
+        buffer.SetGlobalVector(shadowDistanceFadeId, new Vector4(1f / settings.maxDistance, 1f / settings.distanceFade, 1f / (1f - f * f)));
+
+        buffer.SetGlobalMatrixArray(dirShadowMatricesId, dirShadowMatrices);
+        buffer.SetGlobalVectorArray(cascadeDataId, cascadeData);
+
+        SetKeywords();
+        //buffer.SetGlobalVector(shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize));
+        buffer.EndSample(bufferName);
+        ExecuteBuffer();
+    }
+
     void RenderSpotShadows(int index, int split, int tileSize)
     {
         ShadowedOtherLight light = shadowedOtherLights[index];
@@ -336,6 +338,7 @@ public class Shadows
 
         context.DrawShadows(ref shadowSettings);
         buffer.SetGlobalDepthBias(0f, 0f);
+        //buffer.SetGlobalDepthBias(1f, 1f);
     }
 
     void RenderOtherShadows()
@@ -382,7 +385,7 @@ public class Shadows
         ExecuteBuffer();
     }
 
-    // Conversion to atlas coordinates taken from CatLikeCoding.
+    // Conversion to atlas coordinates from CatLikeCoding.
     Matrix4x4 ConvertToAtlasMatrix(Matrix4x4 m, Vector2 offset, int split)
     {
         if (SystemInfo.usesReversedZBuffer)
