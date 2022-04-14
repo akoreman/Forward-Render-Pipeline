@@ -20,9 +20,9 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 
-float Square(float v)
+float Square(float input)
 {
-	return v * v;
+	return input * input;
 }
 
 float3 DecodeNormal (float4 sample, float scale) {
@@ -33,15 +33,20 @@ float3 DecodeNormal (float4 sample, float scale) {
 	#endif
 }
 
-float DistanceSquared(float3 pA, float3 pB)
+float DistanceSquared(float3 vectorA, float3 vectorB)
 {
-	return dot(pA - pB, pA - pB);
+    return dot(vectorA - vectorB, vectorA - vectorB);
 }
 
-float3 NormalTangentToWorld (float3 normalTS, float3 normalWS, float4 tangentWS) {
-	float3x3 tangentToWorld =
-		CreateTangentToWorld(normalWS, tangentWS.xyz, tangentWS.w);
-	return TransformTangentToWorld(normalTS, tangentToWorld);
+float DistanceSquared(float4 vectorA, float4 vectorB)
+{
+    return dot(vectorA - vectorB, vectorA - vectorB);
+}
+
+float3 NormalTangentToWorld (float3 normalTangentSpace, float3 normalWorldSpace, float4 tangentWorldSpace) {
+    float3x3 tangentToWorld = CreateTangentToWorld(normalWorldSpace, tangentWorldSpace.xyz, tangentWorldSpace.w);
+	
+    return TransformTangentToWorld(normalTangentSpace, tangentToWorld);
 }
 
 #endif

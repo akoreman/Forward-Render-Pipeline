@@ -62,6 +62,9 @@ struct OtherShadowData
 {
     float strength;
     int tileIndex;
+    float3 lightPositionWS;
+    float3 lightDirectionWS;
+    float3 spotDirectionWS;
     //int shadowMaskChannel;
 };
 
@@ -182,6 +185,28 @@ float GetDirectionalShadowAttenuation(DirectionalShadowData directional, ShadowD
 	float shadow = FilterDirectionalShadow(positionSTS);
 
 	return lerp(1.0, shadow, directional.strength);
+}
+
+float GetOtherShadowAttenuation(
+	OtherShadowData other, ShadowData global, Surface surfaceWS
+)
+{
+#if !defined(_RECEIVE_SHADOWS)
+    return 1.0;
+#endif
+	
+    float shadow;
+	
+    if (other.strength * global.strength <= 0.0)
+    {
+        return 0.0;
+    }
+    else
+    {
+        shadow = GetOtherShadow(other, global, surfaceWS);
+    }
+	
+    return shadow;
 }
 
 #endif

@@ -203,8 +203,6 @@ public class Shadows
         }
     }
 
-    
-
     void SetKeywords()
     {
         int enabledIndex = (int)settings.directional.filter - 1;
@@ -325,11 +323,11 @@ public class Shadows
     {
         ShadowedOtherLight light = shadowedOtherLights[index];
         var shadowSettings = new ShadowDrawingSettings(cullingResults, light.visibleLightIndex);
-        cullingResults.ComputeSpotShadowMatricesAndCullingPrimitives( light.visibleLightIndex, out Matrix4x4 viewMatrix,out Matrix4x4 projectionMatrix, out ShadowSplitData splitData);
+        cullingResults.ComputeSpotShadowMatricesAndCullingPrimitives( light.visibleLightIndex, out Matrix4x4 viewMatrix, out Matrix4x4 projectionMatrix, out ShadowSplitData splitData);
 
         shadowSettings.splitData = splitData;
 
-        otherShadowMatrices[index] = ConvertToAtlasMatrix(projectionMatrix * viewMatrix,SetTileViewport(index, split, tileSize), split);
+        otherShadowMatrices[index] = ConvertToAtlasMatrix(projectionMatrix * viewMatrix, SetTileViewport(index, split, tileSize), split);
 
         buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
         buffer.SetGlobalDepthBias(0f, light.slopeScaleBias);
@@ -352,7 +350,7 @@ public class Shadows
         buffer.SetRenderTarget(otherShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
 
         buffer.ClearRenderTarget(true, false, Color.clear);
-        buffer.BeginSample(bufferName);
+        //buffer.BeginSample(bufferName);
 
         ExecuteBuffer();
 
@@ -367,9 +365,9 @@ public class Shadows
 
         buffer.SetGlobalMatrixArray(otherShadowMatricesId, otherShadowMatrices);
         SetKeywords( otherFilterKeywords, (int)settings.other.filter - 1);
-        SetKeywords();
+        //SetKeywords();
 
-        buffer.EndSample(bufferName);
+        //buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
 
