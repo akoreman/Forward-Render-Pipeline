@@ -38,8 +38,10 @@ int GetOtherLightCount()
 DirectionalShadowData GetDirectionalShadowData(int lightIndex, ShadowData shadowData)
 {
 	DirectionalShadowData data;
+	
 	data.strength = _DirectionalLightShadowData[lightIndex].x * shadowData.strength;
 	data.tileIndex = _DirectionalLightShadowData[lightIndex].y + shadowData.cascadeIndex;
+	
 	return data;
 }
 
@@ -47,10 +49,9 @@ DirectionalShadowData GetDirectionalShadowData(int lightIndex, ShadowData shadow
 OtherShadowData GetOtherShadowData(int lightIndex)
 {
     OtherShadowData data;
+	
     data.strength = _OtherLightShadowData[lightIndex].x;
     data.tileIndex = _OtherLightShadowData[lightIndex].y;
-    //data.shadowMaskChannel = _OtherLightShadowData[lightIndex].w;
-    //data.isPoint = _OtherLightShadowData[lightIndex].z == 1.0;
     data.lightPositionWS = 0.0;
     data.lightDirectionWS = 0.0;
     data.spotDirectionWS = 0.0;
@@ -68,6 +69,7 @@ Light GetDirectionalLight(int index, Surface surfaceWorldSpace, ShadowData shado
 	DirectionalShadowData dirShadowData = GetDirectionalShadowData(index, shadowData);
 	light.attenuation = GetDirectionalShadowAttenuation(dirShadowData, shadowData, surfaceWorldSpace);
 
+	
 	return light;
 }
 
@@ -95,7 +97,6 @@ Light GetOtherLight(int index, Surface surfaceWorldSpace, ShadowData shadowData)
 	
     light.attenuation = GetOtherShadowAttenuation(otherShadowData, shadowData, surfaceWorldSpace) * spotAttenuation * rangeAttenuation / distanceSqr;
 	
-
     return light;
 }
 

@@ -23,12 +23,14 @@ float3 GetLighting(Surface surfaceWorldSpace, BRDF brdf, GI gi)
 		color += GetLighting(surfaceWorldSpace, brdf, light);
 	}
 	
+	
     for (int j = 0; j < GetOtherLightCount(); j++)
     {
         Light light = GetOtherLight(j, surfaceWorldSpace, shadowData);
         color += GetLighting(surfaceWorldSpace, brdf, light);
     }
-
+	
+	
 	return color;
 }
 

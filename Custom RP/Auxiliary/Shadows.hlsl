@@ -65,7 +65,6 @@ struct OtherShadowData
     float3 lightPositionWS;
     float3 lightDirectionWS;
     float3 spotDirectionWS;
-    //int shadowMaskChannel;
 };
 
 float FadedShadowStrength(float distance, float scale, float fade)
@@ -80,10 +79,10 @@ ShadowData GetShadowData(Surface surfaceWorldSpace)
 
 	data.strength = FadedShadowStrength(surfaceWorldSpace.depth, _ShadowDistanceFade.x, _ShadowDistanceFade.y);
 
-	int i;
-	for (i = 0; i < _CascadeCount; i++) 
+	//int i;
+	
+	for (int i = 0; i < _CascadeCount; i++) 
 	{
-
 		float4 sphere = _CascadeCullingSpheres[i];
 		float distanceSqr = DistanceSquared(surfaceWorldSpace.position, sphere.xyz);
 
@@ -133,9 +132,7 @@ float FilterDirectionalShadow(float3 positionSTS)
 
 float SampleOtherShadowAtlas(float3 positionSTS)
 {
-    return SAMPLE_TEXTURE2D_SHADOW(
-		_OtherShadowAtlas, SHADOW_SAMPLER, positionSTS
-	);
+    return SAMPLE_TEXTURE2D_SHADOW(_OtherShadowAtlas, SHADOW_SAMPLER, positionSTS);
 }
 
 float FilterOtherShadow(float3 positionSTS)
@@ -143,30 +140,20 @@ float FilterOtherShadow(float3 positionSTS)
 #if defined(OTHER_FILTER_SETUP)
 		real weights[OTHER_FILTER_SAMPLES];
 		real2 positions[OTHER_FILTER_SAMPLES];
+	
 		float4 size = _ShadowAtlasSize.wwzz;
+	
 		OTHER_FILTER_SETUP(size, positionSTS.xy, weights, positions);
+	
 		float shadow = 0;
-		for (int i = 0; i < OTHER_FILTER_SAMPLES; i++) {
-			shadow += weights[i] * SampleOtherShadowAtlas(
-				float3(positions[i].xy, positionSTS.z)
-			);
-		}
+	
+		for (int i = 0; i < OTHER_FILTER_SAMPLES; i++) 
+			shadow += weights[i] * SampleOtherShadowAtlas(float3(positions[i].xy, positionSTS.z));
+	
 		return shadow;
 #else
     return SampleOtherShadowAtlas(positionSTS);
 #endif
-}
-
-float GetOtherShadow(
-	OtherShadowData other, ShadowData global, Surface surfaceWS
-)
-{
-    float3 normalBias = surfaceWS.interpolatedNormal * 0.0;
-    float4 positionSTS = mul(
-		_OtherShadowMatrices[other.tileIndex],
-		float4(surfaceWS.position + normalBias, 1.0)
-	);
-    return FilterOtherShadow(positionSTS.xyz / positionSTS.w);
 }
 
 
@@ -176,37 +163,28 @@ float GetDirectionalShadowAttenuation(DirectionalShadowData directional, ShadowD
 		return 1.0;
 	#endif
 
-	if (directional.strength <= 0.0) {
-		return 1.0;
-	}
+	if (directional.strength <= 0.0) { return 1.0; }
+	
 	float3 normalBias = surfaceWS.normal * _CascadeData[global.cascadeIndex].y;
-	float3 positionSTS = mul(_DirectionalShadowMatrices[directional.tileIndex],float4(surfaceWS.position + normalBias, 1.0)).xyz;
+	float3 positionSTS = mul(_DirectionalShadowMatrices[directional.tileIndex], float4(surfaceWS.position + normalBias, 1.0)).xyz;
 
 	float shadow = FilterDirectionalShadow(positionSTS);
 
 	return lerp(1.0, shadow, directional.strength);
 }
 
-float GetOtherShadowAttenuation(
-	OtherShadowData other, ShadowData global, Surface surfaceWS
-)
+float GetOtherShadowAttenuation( OtherShadowData other, ShadowData global, Surface surfaceWS)
 {
 #if !defined(_RECEIVE_SHADOWS)
     return 1.0;
 #endif
+		
+    if (other.strength * global.strength <= 0.0) { return 1.0; }
+    
+    float3 normalBias = surfaceWS.interpolatedNormal * 0.0;
+    float4 positionSTS = mul(_OtherShadowMatrices[other.tileIndex],float4(surfaceWS.position + normalBias, 1.0));
 	
-    float shadow;
-	
-    if (other.strength * global.strength <= 0.0)
-    {
-        return 0.0;
-    }
-    else
-    {
-        shadow = GetOtherShadow(other, global, surfaceWS);
-    }
-	
-    return shadow;
+    return FilterOtherShadow(positionSTS.xyz / positionSTS.w);
 }
 
 #endif

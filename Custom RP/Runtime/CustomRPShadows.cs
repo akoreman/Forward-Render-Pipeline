@@ -147,7 +147,6 @@ public class Shadows
 
     public Vector2 ReserveDirectionalShadows(Light light, int visibleLightIndex)
     {
-
         if (ShadowedDirectionalLightCount < maxShadowedDirectionalLightCount && light.shadows != LightShadows.None && light.shadowStrength > 0f && cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
         {
             ShadowedDirectionalLights[ShadowedDirectionalLightCount] = new ShadowedDirectionalLight { visibleLightIndex = visibleLightIndex };
@@ -261,7 +260,6 @@ public class Shadows
                 cascadeCullingSpheres[i] = cullingSphere;
             }
 
-            //dirShadowMatrices[index] = projectionMatrix * viewMatrix;
             int tileIndex = tileOffset + i;
             dirShadowMatrices[tileIndex] = ConvertToAtlasMatrix(projectionMatrix * viewMatrix, SetTileViewport(tileIndex, split, tileSize), split);
             buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
@@ -294,7 +292,6 @@ public class Shadows
         buffer.SetRenderTarget(dirShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
 
         buffer.ClearRenderTarget(true, false, Color.clear);
-        buffer.BeginSample(bufferName);
         ExecuteBuffer();
 
         for (int i = 0; i < ShadowedDirectionalLightCount; i++)
@@ -315,7 +312,6 @@ public class Shadows
 
         SetKeywords();
         //buffer.SetGlobalVector(shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize));
-        buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
 
@@ -346,16 +342,16 @@ public class Shadows
         atlasSizes.w = 1f / atlasSize;
 
         buffer.GetTemporaryRT( otherShadowAtlasId, atlasSize, atlasSize,32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
-
         buffer.SetRenderTarget(otherShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
 
         buffer.ClearRenderTarget(true, false, Color.clear);
-        //buffer.BeginSample(bufferName);
 
         ExecuteBuffer();
 
         int tiles = shadowedOtherLightCount;
+
         int split = tiles <= 1 ? 1 : tiles <= 4 ? 2 : 4;
+
         int tileSize = atlasSize / split;
 
         for (int i = 0; i < shadowedOtherLightCount; i++)
@@ -364,10 +360,10 @@ public class Shadows
         }
 
         buffer.SetGlobalMatrixArray(otherShadowMatricesId, otherShadowMatrices);
+        //buffer.SetGlobalVectorArray(otherShadowTilesId, otherShadowTiles);
         SetKeywords( otherFilterKeywords, (int)settings.other.filter - 1);
         //SetKeywords();
 
-        //buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
 
@@ -375,10 +371,7 @@ public class Shadows
     {
         buffer.ReleaseTemporaryRT(dirShadowAtlasId);
 
-        if (shadowedOtherLightCount > 0)
-        {
-            buffer.ReleaseTemporaryRT(otherShadowAtlasId);
-        }
+        if (shadowedOtherLightCount > 0) { buffer.ReleaseTemporaryRT(otherShadowAtlasId); }
 
         ExecuteBuffer();
     }
