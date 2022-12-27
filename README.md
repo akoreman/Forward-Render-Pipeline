@@ -28,12 +28,6 @@ tutorial by CatLikeCoding.
 - Support for point lights + shadows.
 - Support for spot lights (without shadows).
 
- 
-**Possible extensions:**
- - Support for point light shadows.
- <!-- - Support for baked shadows. -->
- <!-- - Support for light cookies. -->
- 
  ## Screenshots:  
  
 <img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/sampleRender.PNG" width="400">  
