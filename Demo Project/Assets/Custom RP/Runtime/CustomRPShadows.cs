@@ -56,9 +56,7 @@ public class ShadowSettings
     [System.Serializable]
     public struct Other
     {
-
         public TextureSize atlasSize;
-
         public FilterMode filter;
     }
 
@@ -81,12 +79,11 @@ public class Shadows
     struct ShadowedDirectionalLight { public int visibleLightIndex; }
     ShadowedDirectionalLight[] ShadowedDirectionalLights = new ShadowedDirectionalLight[maxShadowedDirectionalLightCount];
 
-    struct ShadowedOtherLight
-    {
-        public int visibleLightIndex;
-        public float slopeScaleBias;
-        public float normalBias;
-    }
+    struct ShadowedOtherLight { public int visibleLightIndex; }
+    //{
+        //public int visibleLightIndex;
+        //public float normalBias;
+    //}
 
     ShadowedOtherLight[] shadowedOtherLights = new ShadowedOtherLight[maxShadowedOtherLightCount];
 
@@ -167,13 +164,14 @@ public class Shadows
             shadowedOtherLights[shadowedOtherLightCount] = new ShadowedOtherLight
             {
                 visibleLightIndex = visibleLightIndex,
-                slopeScaleBias = light.shadowBias,
-                normalBias = light.shadowNormalBias
+                //slopeScaleBias = light.shadowBias,
+                //normalBias = light.shadowNormalBias
             };
 
+            int counter = shadowedOtherLightCount;
             shadowedOtherLightCount++;
 
-            return new Vector2(-light.shadowStrength, 0f);
+            return new Vector2(light.shadowStrength, counter);
         }
 
         return Vector2.zero;
@@ -184,22 +182,14 @@ public class Shadows
     public void Render()
     {
         if (ShadowedDirectionalLightCount > 0)
-        {
             RenderDirectionalShadows();
-        }
         else
-        {
             buffer.GetTemporaryRT(dirShadowAtlasId, 1, 1, 32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
-        }
 
         if (shadowedOtherLightCount > 0)
-        {
             RenderOtherShadows();
-        }
         else
-        {
             buffer.SetGlobalTexture(otherShadowAtlasId, dirShadowAtlasId);
-        }
     }
 
     void SetKeywords()
@@ -208,13 +198,9 @@ public class Shadows
         for (int i = 0; i < directionalFilterKeywords.Length; i++)
         {
             if (i == enabledIndex)
-            {
                 buffer.EnableShaderKeyword(directionalFilterKeywords[i]);
-            }
             else
-            {
                 buffer.DisableShaderKeyword(directionalFilterKeywords[i]);
-            }
         }
     }
 
@@ -223,13 +209,9 @@ public class Shadows
         for (int i = 0; i < keywords.Length; i++)
         {
             if (i == enabledIndex)
-            {
                 buffer.EnableShaderKeyword(keywords[i]);
-            }
             else
-            {
                 buffer.DisableShaderKeyword(keywords[i]);
-            }
         }
     }
 
@@ -310,7 +292,7 @@ public class Shadows
         buffer.SetGlobalMatrixArray(dirShadowMatricesId, dirShadowMatrices);
         buffer.SetGlobalVectorArray(cascadeDataId, cascadeData);
 
-        SetKeywords();
+        SetKeywords(directionalFilterKeywords, (int)settings.directional.filter - 1);
         //buffer.SetGlobalVector(shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize));
         ExecuteBuffer();
     }
@@ -326,13 +308,11 @@ public class Shadows
         otherShadowMatrices[index] = ConvertToAtlasMatrix(projectionMatrix * viewMatrix, SetTileViewport(index, split, tileSize), split);
 
         buffer.SetViewProjectionMatrices(viewMatrix, projectionMatrix);
-        buffer.SetGlobalDepthBias(0f, light.slopeScaleBias);
 
         ExecuteBuffer();
 
         context.DrawShadows(ref shadowSettings);
         buffer.SetGlobalDepthBias(0f, 0f);
-        //buffer.SetGlobalDepthBias(1f, 1f);
     }
 
     void RenderOtherShadows()
@@ -341,17 +321,15 @@ public class Shadows
         atlasSizes.z = atlasSize;
         atlasSizes.w = 1f / atlasSize;
 
-        buffer.GetTemporaryRT( otherShadowAtlasId, atlasSize, atlasSize,32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
+        buffer.GetTemporaryRT(otherShadowAtlasId, atlasSize, atlasSize, 32, FilterMode.Bilinear, RenderTextureFormat.Shadowmap);
         buffer.SetRenderTarget(otherShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
 
         buffer.ClearRenderTarget(true, false, Color.clear);
-
+        //buffer.BeginSample(bufferName);
         ExecuteBuffer();
 
         int tiles = shadowedOtherLightCount;
-
         int split = tiles <= 1 ? 1 : tiles <= 4 ? 2 : 4;
-
         int tileSize = atlasSize / split;
 
         for (int i = 0; i < shadowedOtherLightCount; i++)
@@ -360,10 +338,9 @@ public class Shadows
         }
 
         buffer.SetGlobalMatrixArray(otherShadowMatricesId, otherShadowMatrices);
-        //buffer.SetGlobalVectorArray(otherShadowTilesId, otherShadowTiles);
         SetKeywords( otherFilterKeywords, (int)settings.other.filter - 1);
-        //SetKeywords();
 
+        //buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
 
@@ -415,10 +392,9 @@ public class Shadows
 
     void SetCascadeData(int index, Vector4 cullingSphere, float tileSize)
     {
-
         float texelSize = 2f * cullingSphere.w / tileSize;
         float filterSize = texelSize * ((float)settings.directional.filter + 1f);
-        //cascadeData[index].x = 1f / cullingSphere.w;
+
         cullingSphere.w -= filterSize;
         cullingSphere.w *= cullingSphere.w;
         cascadeCullingSpheres[index] = cullingSphere;

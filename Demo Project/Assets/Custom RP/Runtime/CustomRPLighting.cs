@@ -23,6 +23,7 @@ public class Lighting
     static int otherLightPositionsId = Shader.PropertyToID("_OtherLightPositions");
     static int otherLightDirectionsId = Shader.PropertyToID("_OtherLightDirections");
     static int otherLightSpotAnglesId = Shader.PropertyToID("_OtherLightSpotAngles");
+    static int otherLightShadowDataId = Shader.PropertyToID("_OtherLightShadowData");
 
 
     static Vector4[] dirLightColours = new Vector4[maxDirLightCount];
@@ -135,6 +136,7 @@ public class Lighting
             buffer.SetGlobalVectorArray(otherLightPositionsId, otherLightPositions);
             buffer.SetGlobalVectorArray(otherLightDirectionsId, otherLightDirections);
             buffer.SetGlobalVectorArray(otherLightSpotAnglesId, otherLightSpotAngles);
+            buffer.SetGlobalVectorArray(otherLightShadowDataId, otherLightShadowData);
         }
     }
 
