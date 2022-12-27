@@ -65,3 +65,7 @@ tutorial by CatLikeCoding.
 **Illumination by spot lights**
 
 <img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/spotlights.png" width="400">  
+
+**Shadow from spot lights**
+
+<img src="https://raw.github.com/akoreman/WIP-ShaderDemo/master/images/SpotShadow.png" width="400">  
