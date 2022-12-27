@@ -2,7 +2,7 @@
 
 In order to gain more intuition for scripting render pipelines this project implements a custom forward render
 pipeline in Unity3D by using its scriptable render pipeline (SRP) and HLSL for the shaders. For some parts following the
-tutorial by CatLikeCoding.
+tutorial by [CatLikeCoding](https://catlikecoding.com/unity/tutorials/custom-srp/).
 
 **Currently supports:**
 - Unlit and Lit shaders
