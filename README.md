@@ -25,12 +25,12 @@ tutorial by CatLikeCoding.
   - Support for reflections from unity reflection probes.
   - Reflection sharpness affected by surface rougness.
 - Support for emmisive surfaces.
-- Support for point lights (without shadows).
+- Support for point lights + shadows.
 - Support for spot lights (without shadows).
 
  
 **Possible extensions:**
- - Support for spot and point light shadows.
+ - Support for point light shadows.
  <!-- - Support for baked shadows. -->
  <!-- - Support for light cookies. -->
  
