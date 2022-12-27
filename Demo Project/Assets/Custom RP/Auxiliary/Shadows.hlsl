@@ -40,6 +40,7 @@ CBUFFER_START(_CustomShadows)
 	float4 _CascadeCullingSpheres[MAX_CASCADE_COUNT];
 	float4x4 _DirectionalShadowMatrices[MAX_SHADOWED_DIRECTIONAL_LIGHT_COUNT * MAX_CASCADE_COUNT];
 	float4x4 _OtherShadowMatrices[MAX_SHADOWED_OTHER_LIGHT_COUNT];
+
 	//float _ShadowDistance;
 	float4 _ShadowAtlasSize;
 	float4 _ShadowDistanceFade;

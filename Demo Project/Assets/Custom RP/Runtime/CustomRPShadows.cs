@@ -22,7 +22,6 @@ public class ShadowSettings
         PCF2x2, PCF3x3, PCF5x5, PCF7x7
     }
 
-
     [System.Serializable]
     public struct Directional
     {
@@ -80,11 +79,6 @@ public class Shadows
     ShadowedDirectionalLight[] ShadowedDirectionalLights = new ShadowedDirectionalLight[maxShadowedDirectionalLightCount];
 
     struct ShadowedOtherLight { public int visibleLightIndex; }
-    //{
-        //public int visibleLightIndex;
-        //public float normalBias;
-    //}
-
     ShadowedOtherLight[] shadowedOtherLights = new ShadowedOtherLight[maxShadowedOtherLightCount];
 
     ScriptableRenderContext context;
@@ -101,11 +95,9 @@ public class Shadows
     static int cascadeCullingSpheresId = Shader.PropertyToID("_CascadeCullingSpheres");
     static int cascadeDataId = Shader.PropertyToID("_CascadeData");
     static int shadowAtlasSizeId = Shader.PropertyToID("_ShadowAtlasSize");
-    //static int shadowDistanceId = Shader.PropertyToID("_ShadowDistance");
     static int shadowDistanceFadeId = Shader.PropertyToID("_ShadowDistanceFade");
     static int otherShadowAtlasId = Shader.PropertyToID("_OtherShadowAtlas");
     static int otherShadowMatricesId = Shader.PropertyToID("_OtherShadowMatrices");
-
 
     static string[] directionalFilterKeywords = {
         "_DIRECTIONAL_PCF3",
@@ -161,12 +153,7 @@ public class Shadows
     {
         if (shadowedOtherLightCount < maxShadowedOtherLightCount && cullingResults.GetShadowCasterBounds(visibleLightIndex, out Bounds b))
         {
-            shadowedOtherLights[shadowedOtherLightCount] = new ShadowedOtherLight
-            {
-                visibleLightIndex = visibleLightIndex,
-                //slopeScaleBias = light.shadowBias,
-                //normalBias = light.shadowNormalBias
-            };
+            shadowedOtherLights[shadowedOtherLightCount] = new ShadowedOtherLight {visibleLightIndex = visibleLightIndex};
 
             int counter = shadowedOtherLightCount;
             shadowedOtherLightCount++;
@@ -176,8 +163,6 @@ public class Shadows
 
         return Vector2.zero;
     }
-
-
 
     public void Render()
     {
@@ -192,18 +177,6 @@ public class Shadows
             buffer.SetGlobalTexture(otherShadowAtlasId, dirShadowAtlasId);
     }
 
-    void SetKeywords()
-    {
-        int enabledIndex = (int)settings.directional.filter - 1;
-        for (int i = 0; i < directionalFilterKeywords.Length; i++)
-        {
-            if (i == enabledIndex)
-                buffer.EnableShaderKeyword(directionalFilterKeywords[i]);
-            else
-                buffer.DisableShaderKeyword(directionalFilterKeywords[i]);
-        }
-    }
-
     void SetKeywords(string[] keywords, int enabledIndex)
     {
         for (int i = 0; i < keywords.Length; i++)
@@ -214,7 +187,6 @@ public class Shadows
                 buffer.DisableShaderKeyword(keywords[i]);
         }
     }
-
 
     void RenderDirectionalShadows(int index, int split, int tileSize)
     {
@@ -283,7 +255,6 @@ public class Shadows
 
         buffer.SetGlobalInt(cascadeCountId, settings.directional.cascadeCount);
         buffer.SetGlobalVectorArray(cascadeCullingSpheresId, cascadeCullingSpheres);
-        //buffer.SetGlobalFloat(shadowDistanceId, settings.maxDistance);
 
         float f = 1f - settings.directional.cascadeFade;
 
@@ -293,7 +264,6 @@ public class Shadows
         buffer.SetGlobalVectorArray(cascadeDataId, cascadeData);
 
         SetKeywords(directionalFilterKeywords, (int)settings.directional.filter - 1);
-        //buffer.SetGlobalVector(shadowAtlasSizeId, new Vector4(atlasSize, 1f / atlasSize));
         ExecuteBuffer();
     }
 
@@ -325,7 +295,6 @@ public class Shadows
         buffer.SetRenderTarget(otherShadowAtlasId, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store);
 
         buffer.ClearRenderTarget(true, false, Color.clear);
-        //buffer.BeginSample(bufferName);
         ExecuteBuffer();
 
         int tiles = shadowedOtherLightCount;
@@ -340,7 +309,6 @@ public class Shadows
         buffer.SetGlobalMatrixArray(otherShadowMatricesId, otherShadowMatrices);
         SetKeywords( otherFilterKeywords, (int)settings.other.filter - 1);
 
-        //buffer.EndSample(bufferName);
         ExecuteBuffer();
     }
 
